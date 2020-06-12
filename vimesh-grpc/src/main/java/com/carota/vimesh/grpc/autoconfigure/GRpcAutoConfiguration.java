@@ -37,13 +37,13 @@ public class GRpcAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = "grpc.enabled", havingValue = "true", matchIfMissing = true)
     public GRpcServerRunner grpcServerRunner(@Qualifier("grpcInternalConfigurator") Consumer<ServerBuilder<?>> configurator) {
-        return new GRpcServerRunner(configurator, ServerBuilder.forPort(grpcServerProperties.getRunningPort()));
+        return new GRpcServerRunner(configurator, ServerBuilder.forPort(grpcServerProperties.getRunningPort()),grpcServerProperties.getMaxInboundMessageSize());
     }
 
     @Bean
     @ConditionalOnExpression("#{environment.getProperty('grpc.inProcessServerName','')!=''}")
     public GRpcServerRunner grpcInprocessServerRunner(@Qualifier("grpcInternalConfigurator") Consumer<ServerBuilder<?>> configurator){
-        return new GRpcServerRunner(configurator, InProcessServerBuilder.forName(grpcServerProperties.getInProcessServerName()));
+        return new GRpcServerRunner(configurator, InProcessServerBuilder.forName(grpcServerProperties.getInProcessServerName()),grpcServerProperties.getMaxInboundMessageSize());
     }
 
     @Bean

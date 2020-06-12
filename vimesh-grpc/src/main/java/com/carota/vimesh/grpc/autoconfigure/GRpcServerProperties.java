@@ -14,6 +14,7 @@ import lombok.Setter;
 @Getter @Setter
 public class GRpcServerProperties {
 	public static final int DEFAULT_GRPC_PORT = 6565;
+	public static final int MAX_INBOUND_MESSAGE_SIZE = 4*1024*1024;
     /**
      * gRPC server port
      *
@@ -30,6 +31,9 @@ public class GRpcServerProperties {
      * Enables the embedded grpc server.
      */
     private boolean enabled = true;
+
+
+    private int maxInboundMessageSize = MAX_INBOUND_MESSAGE_SIZE;
 
 
     /**

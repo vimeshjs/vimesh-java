@@ -57,20 +57,24 @@ public class GRpcServerRunner implements CommandLineRunner, DisposableBean {
 
     private Server server;
 
+    private int maxInboundMessageSize;
+
     private final ServerBuilder<?> serverBuilder;
 
     private final CountDownLatch latch;
 
-    public GRpcServerRunner(Consumer<ServerBuilder<?>> configurator, ServerBuilder<?> serverBuilder) {
+    public GRpcServerRunner(Consumer<ServerBuilder<?>> configurator, ServerBuilder<?> serverBuilder,int maxInboundMessageSize) {
         this.configurator = configurator;
         this.serverBuilder = serverBuilder;
+        this.maxInboundMessageSize = maxInboundMessageSize;
         this.latch = new CountDownLatch(1);
     }
 
     @Override
     public void run(String... args) throws Exception {
         log.info("Starting gRPC Server ...");
-
+        serverBuilder.maxInboundMessageSize(maxInboundMessageSize);
+        log.info("gRPC Server MaxInboundMessageSize is: {}", maxInboundMessageSize);
         Collection<ServerInterceptor> globalInterceptors = getBeanNamesByTypeWithAnnotation(GRpcGlobalInterceptor.class, ServerInterceptor.class)
                 .map(name -> applicationContext.getBeanFactory().getBean(name, ServerInterceptor.class))
                 .collect(Collectors.toList());
