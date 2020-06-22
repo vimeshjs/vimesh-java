@@ -57,32 +57,73 @@ public class StorageScope {
     }
     
     public byte[] getObjectAsBuffer(String filePath) throws Exception {
-        InputStream input = storage.getObject(bucket, prefix + filePath);
-        return writeToOutput(input).toByteArray();
+        try (InputStream input = getObject(filePath)) {
+            return writeToOutput(input).toByteArray();
+        }
     }
     
     public byte[] getObjectAsBuffer(String filePath, long offset, long size) throws Exception {
-        InputStream input = storage.getObject(bucket, prefix + filePath, offset, size);
-        return writeToOutput(input).toByteArray();
+        try (InputStream input = getObject(filePath, offset, size)) {
+            return writeToOutput(input).toByteArray();
+        }
     }
     
     public String getObjectAsString(String filePath) throws Exception {
-        InputStream input = storage.getObject(bucket, prefix + filePath);
-        return writeToOutput(input).toString();
+        try (InputStream input = getObject(filePath)) {
+            return writeToOutput(input).toString();
+        }
     }
     
     public String getObjectAsString(String filePath, long offset, long size) throws Exception {
-        InputStream input = storage.getObject(bucket, prefix + filePath, offset, size);
-        return writeToOutput(input).toString();
+        try (InputStream input = getObject(filePath, offset, size)) {
+            return writeToOutput(input).toString();
+        }
+    }
+    
+    public void getBucketObject(String bucket, String filePath, String localFile) throws Exception {
+        storage.getObject(bucket, prefix + filePath, localFile);
+    }
+
+    public InputStream getBucketObject(String bucket, String filePath) throws Exception {
+        return storage.getObject(bucket, prefix + filePath);
+    }
+
+    public InputStream getBucketObject(String bucket, String filePath, long offset, long size) throws Exception {
+        return storage.getObject(bucket, prefix + filePath, offset, size);
+    }
+    
+    public byte[] getBucketObjectAsBuffer(String bucket, String filePath) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath)) {
+            return writeToOutput(input).toByteArray();
+        }
+    }
+    
+    public byte[] getBucketObjectAsBuffer(String bucket, String filePath, long offset, long size) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath, offset, size)) {
+            return writeToOutput(input).toByteArray();
+        }
+    }
+    
+    public String getBucketObjectAsString(String bucket, String filePath) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath)) {
+            return writeToOutput(input).toString();
+        }
+    }
+    
+    public String getBucketObjectAsString(String bucket, String filePath, long offset, long size) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath, offset, size)) {
+            return writeToOutput(input).toString();
+        }
     }
     
     private ByteArrayOutputStream writeToOutput(InputStream input) throws Exception {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = input.read(buffer)) != -1) {
-            output.write(buffer, 0, length);
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = input.read(buffer)) != -1) {
+                output.write(buffer, 0, length);
+            }
+            return output;
         }
-        return output;
     }
 }

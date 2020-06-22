@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import com.carota.vimesh.storage.autoconfigure.StorageProperties;
 
@@ -14,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StorageService {
 
-    private static final String DEFAULT_BUCKET = "default";
-    
     @Autowired
     private StorageProperties storageProperties;
     
@@ -34,10 +33,11 @@ public class StorageService {
                 }
                 
                 String bucket = options.getBucket();
-                if (bucket == null || bucket.isEmpty()) {
-                    bucket = DEFAULT_BUCKET;
+                if (StringUtils.hasText(bucket)) {
+                    storage.ensureBucket(bucket);
+                } else {
+                    bucket = null;
                 }
-                storage.ensureBucket(bucket);
                 
                 StorageScope scope = StorageFactory.createStorageScope(storage, bucket, options.getPrefix());
                 scopes.put(options.getName(), scope);
@@ -53,6 +53,10 @@ public class StorageService {
         }
         
         log.info("Storage service initialized");
+    }
+    
+    public void newScope() {
+        
     }
     
     public StorageScope getScope(String name) {
