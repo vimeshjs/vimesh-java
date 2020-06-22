@@ -27,7 +27,7 @@ public class PortletRunner implements CommandLineRunner, DisposableBean {
     public void run(String... args) throws Exception {
         portlet.startup();
         
-        long interval = portletProperties.getDiscovery().getRefreshInterval().toMillis();
+        long interval = portletProperties.getRefreshInterval().toMillis();
         refreshExecutor.scheduleWithFixedDelay(new Runnable() {
 
             @Override

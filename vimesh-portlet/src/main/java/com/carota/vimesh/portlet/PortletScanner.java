@@ -11,8 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 
 import org.reflections.Reflections;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import com.carota.vimesh.grpc.annotation.GRpcService;
+import com.carota.vimesh.portlet.autoconfigure.PortletProperties;
 
 import io.grpc.Channel;
 import lombok.Getter;
@@ -22,14 +25,20 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class PortletScanner {
     
-    private static final String SCAN_PACKAGE = "com.carota";
+    @Autowired
+    private PortletProperties portletProperties;
     
     private Set<String> services = new HashSet<>();
     private Map<Class<?>, GRpcClientBuilder> clients = new ConcurrentHashMap<>();
 
     @PostConstruct
     private void init() {
-        Reflections reflections = new Reflections(SCAN_PACKAGE);
+        if (!StringUtils.hasText(portletProperties.getScan())) {
+            log.warn("Must set a package for gRPC scanning");
+            return;
+        }
+        
+        Reflections reflections = new Reflections(portletProperties.getScan());
         
         // scan services
         Set<Class<?>> serviceClasses = reflections.getTypesAnnotatedWith(GRpcService.class);

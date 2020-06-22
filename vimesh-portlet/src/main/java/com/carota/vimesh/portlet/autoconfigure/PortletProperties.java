@@ -7,45 +7,39 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Getter;
 import lombok.Setter;
 
-@ConfigurationProperties("portlet")
+@ConfigurationProperties("discovery")
 @Getter
 @Setter
 public class PortletProperties {
 
     /**
-     * portlet enabled
+     * discovery client enabled
      */
     private boolean enabled;
+    /**
+     * package for scanning GRPC
+     */
+    private String scan;
+    /**
+     * discovery service address
+     */
+    private Url url;
     /**
      * current service address, will auto detect it if not giving
      */
     private Url selfUrl = null;
     /**
-     * discovery configuration
+     * address expiration time
      */
-    private Discovery discovery;
-    
-    @Getter
-    @Setter
-    public static class Discovery {
-        
-        /**
-         * discovery address
-         */
-        private Url url;
-        /**
-         * address expiration time
-         */
-        private Duration expiration = Duration.ofMinutes(1);
-        /**
-         * time interval to send address to discovery
-         */
-        private Duration refreshInterval = Duration.ofSeconds(3);
-        /**
-         * shutdown timeout of GRPC client
-         */
-        private Duration shutdownGrace = Duration.ofSeconds(5);
-    }
+    private Duration expiration = Duration.ofMinutes(1);
+    /**
+     * time interval to sync address to discovery
+     */
+    private Duration refreshInterval = Duration.ofSeconds(3);
+    /**
+     * shutdown timeout of GRPC client
+     */
+    private Duration shutdownGrace = Duration.ofSeconds(5);
     
     @Getter
     @Setter
@@ -56,7 +50,7 @@ public class PortletProperties {
         
         @Override
         public String toString() {
-            return host + ":" + port;
+            return port != 0 ? host + ":" + port : host;
         }
     }
 }

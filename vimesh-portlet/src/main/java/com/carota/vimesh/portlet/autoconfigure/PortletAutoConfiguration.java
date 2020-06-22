@@ -14,19 +14,19 @@ import com.carota.vimesh.portlet.PortletScanner;
 public class PortletAutoConfiguration {
 
     @Bean
-    @ConditionalOnProperty("portlet.enabled")
+    @ConditionalOnProperty("discovery.enabled")
     public PortletScanner portletScanner() {
         return new PortletScanner();
     }
     
     @Bean
-    @ConditionalOnProperty("portlet.enabled")
+    @ConditionalOnProperty("discovery.enabled")
     public PortletService portletService() {
         return new PortletService();
     }
     
     @Bean
-    @ConditionalOnProperty("portlet.enabled")
+    @ConditionalOnProperty("discovery.enabled")
     public PortletRunner portletRunner() {
         return new PortletRunner();
     }
