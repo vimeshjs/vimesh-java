@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.carota.vimesh.storage.autoconfigure.StorageAutoConfiguration
+org.vimesh.storage.autoconfigure.StorageAutoConfiguration

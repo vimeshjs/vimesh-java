@@ -1,4 +1,4 @@
-package com.carota.vimesh.grpc.autoconfigure;
+package org.vimesh.grpc.autoconfigure;
 
 
 import java.io.IOException;
@@ -15,10 +15,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-
-import com.carota.vimesh.grpc.GRpcServerBuilderConfigurer;
-import com.carota.vimesh.grpc.GRpcServerRunner;
-import com.carota.vimesh.grpc.annotation.GRpcService;
+import org.vimesh.grpc.GRpcServerBuilderConfigurer;
+import org.vimesh.grpc.GRpcServerRunner;
+import org.vimesh.grpc.annotation.GRpcService;
 
 import io.grpc.ServerBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;

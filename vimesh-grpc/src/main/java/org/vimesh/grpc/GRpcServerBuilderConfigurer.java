@@ -1,4 +1,4 @@
-package com.carota.vimesh.grpc;
+package org.vimesh.grpc;
 
 import io.grpc.ServerBuilder;
 

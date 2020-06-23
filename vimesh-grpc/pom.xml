@@ -5,13 +5,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.carota</groupId>
-		<artifactId>vimesh</artifactId>
+		<groupId>org.vimesh</groupId>
+		<artifactId>vimesh-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.carota</groupId>
 	<artifactId>grpc-spring-boot-starter</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>vimesh-grpc</name>
 	<url>http://maven.apache.org</url>
 	<properties>

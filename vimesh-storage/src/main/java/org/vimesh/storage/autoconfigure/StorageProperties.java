@@ -1,4 +1,4 @@
-package com.carota.vimesh.storage.autoconfigure;
+package org.vimesh.storage.autoconfigure;
 
 import java.util.List;
 

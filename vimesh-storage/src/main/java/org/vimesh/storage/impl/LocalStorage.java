@@ -1,10 +1,10 @@
-package com.carota.vimesh.storage.impl;
+package org.vimesh.storage.impl;
 
 import java.io.InputStream;
 import java.util.List;
 
-import com.carota.vimesh.storage.Storage;
-import com.carota.vimesh.storage.StorageStat;
+import org.vimesh.storage.Storage;
+import org.vimesh.storage.StorageStat;
 
 public class LocalStorage implements Storage {
 

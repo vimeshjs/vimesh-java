@@ -1,4 +1,4 @@
-package com.carota.vimesh.storage;
+package org.vimesh.storage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

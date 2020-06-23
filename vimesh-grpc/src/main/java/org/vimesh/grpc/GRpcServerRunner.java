@@ -1,4 +1,4 @@
-package com.carota.vimesh.grpc;
+package org.vimesh.grpc;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -19,17 +19,15 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.type.AnnotatedTypeMetadata;
-
-import com.carota.vimesh.grpc.annotation.GRpcGlobalInterceptor;
-import com.carota.vimesh.grpc.annotation.GRpcService;
-import com.carota.vimesh.grpc.autoconfigure.GRpcServerProperties;
-import com.carota.vimesh.grpc.context.GRpcServerInitializedEvent;
+import org.vimesh.grpc.annotation.GRpcGlobalInterceptor;
+import org.vimesh.grpc.annotation.GRpcService;
+import org.vimesh.grpc.autoconfigure.GRpcServerProperties;
+import org.vimesh.grpc.context.GRpcServerInitializedEvent;
 
 import io.grpc.BindableService;
 import io.grpc.Server;

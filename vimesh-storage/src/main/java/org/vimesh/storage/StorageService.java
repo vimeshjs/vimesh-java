@@ -1,4 +1,4 @@
-package com.carota.vimesh.storage;
+package org.vimesh.storage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,8 +7,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-
-import com.carota.vimesh.storage.autoconfigure.StorageProperties;
+import org.vimesh.storage.autoconfigure.StorageProperties;
 
 import lombok.extern.slf4j.Slf4j;
 

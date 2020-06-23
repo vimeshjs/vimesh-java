@@ -1,4 +1,4 @@
-package com.carota.vimesh.storage.impl;
+package org.vimesh.storage.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.carota.vimesh.storage.Storage;
-import com.carota.vimesh.storage.StorageStat;
-import com.carota.vimesh.storage.autoconfigure.StorageProperties.MinioOptions;
+import org.vimesh.storage.Storage;
+import org.vimesh.storage.StorageStat;
+import org.vimesh.storage.autoconfigure.StorageProperties.MinioOptions;
 
 import io.minio.MinioClient;
 import io.minio.ObjectStat;

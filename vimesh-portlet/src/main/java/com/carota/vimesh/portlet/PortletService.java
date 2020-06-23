@@ -172,14 +172,16 @@ public class PortletService {
     
     private PortletProperties.Url findSelfUrl() {
         try {
+            PortletProperties.Url url = new PortletProperties.Url();
             // prefer configure address if giving
             if (portletProperties.getSelfUrl() != null) {
-                return portletProperties.getSelfUrl();
+                url.setHost(portletProperties.getSelfUrl().getHost());
+                url.setPort(portletProperties.getSelfUrl().getPort());
+            } else {
+                // find local address
+                url.setHost(InetUtils.findLocalAddress().getHostAddress());
             }
-            // find local address
-            PortletProperties.Url url = new PortletProperties.Url();
-            url.setHost(InetUtils.findLocalAddress().getHostAddress());
-            if (gRpcServerProperties != null) {
+            if (url.getPort() == 0 && gRpcServerProperties != null) {
                 url.setPort(gRpcServerProperties.getRunningPort());
             }
             return url;

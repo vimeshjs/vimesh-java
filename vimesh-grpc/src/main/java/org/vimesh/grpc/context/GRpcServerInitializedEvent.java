@@ -1,4 +1,4 @@
-package com.carota.vimesh.grpc.context;
+package org.vimesh.grpc.context;
 
 
 import org.springframework.context.ApplicationContext;

@@ -1,4 +1,4 @@
-package com.carota.vimesh.grpc.autoconfigure;
+package org.vimesh.grpc.autoconfigure;
 
 import java.util.Optional;
 

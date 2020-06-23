@@ -1,4 +1,4 @@
-package com.carota.vimesh.grpc.annotation;
+package org.vimesh.grpc.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

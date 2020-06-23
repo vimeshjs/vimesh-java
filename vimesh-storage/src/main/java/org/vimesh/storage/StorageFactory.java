@@ -1,8 +1,8 @@
-package com.carota.vimesh.storage;
+package org.vimesh.storage;
 
-import com.carota.vimesh.storage.autoconfigure.StorageProperties;
-import com.carota.vimesh.storage.impl.LocalStorage;
-import com.carota.vimesh.storage.impl.MinioStorage;
+import org.vimesh.storage.autoconfigure.StorageProperties;
+import org.vimesh.storage.impl.LocalStorage;
+import org.vimesh.storage.impl.MinioStorage;
 
 import lombok.extern.slf4j.Slf4j;
 
