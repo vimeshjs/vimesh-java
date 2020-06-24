@@ -1,4 +1,4 @@
-package com.carota.vimesh.portlet;
+package org.vimesh.grpc.client;
 
 import io.grpc.Channel;
 

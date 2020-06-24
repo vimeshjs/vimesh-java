@@ -1,4 +1,4 @@
-package com.carota.vimesh.portlet.autoconfigure;
+package org.vimesh.discovery.autoconfigure;
 
 import java.time.Duration;
 
@@ -10,7 +10,7 @@ import lombok.Setter;
 @ConfigurationProperties("discovery")
 @Getter
 @Setter
-public class PortletProperties {
+public class DiscoveryProperties {
 
     /**
      * discovery client enabled

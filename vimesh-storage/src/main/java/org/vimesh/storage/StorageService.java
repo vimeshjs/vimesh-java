@@ -54,10 +54,6 @@ public class StorageService {
         log.info("Storage service initialized");
     }
     
-    public void newScope() {
-        
-    }
-    
     public StorageScope getScope(String name) {
         return scopes.get(name);
     }

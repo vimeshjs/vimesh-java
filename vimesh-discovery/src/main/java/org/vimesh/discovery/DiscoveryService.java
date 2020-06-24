@@ -1,4 +1,4 @@
-package com.carota.vimesh.portlet;
+package org.vimesh.discovery;
 
 import java.time.Duration;
 import java.util.Map;
@@ -7,26 +7,27 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.carota.vimesh.portlet.client.KeyValueClient;
-import com.carota.vimesh.grpc.autoconfigure.GRpcServerProperties;
-import com.carota.vimesh.portlet.autoconfigure.PortletProperties;
-import com.carota.vimesh.portlet.utils.InetUtils;
+import org.vimesh.discovery.autoconfigure.DiscoveryProperties;
+import org.vimesh.discovery.client.KeyValueClient;
+import org.vimesh.discovery.utils.InetUtils;
+import org.vimesh.grpc.autoconfigure.GRpcServerProperties;
+import org.vimesh.grpc.client.GRpcClient;
+import org.vimesh.grpc.client.GRpcClientBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class PortletService {
+public class DiscoveryService {
 
     private static final String SERVICE_PREFIX = "services/@";
     private static final String PORTLET_PREFIX = "portlets/@";
     
-    @Autowired
-    private PortletProperties portletProperties;
     @Autowired(required=false)
     private GRpcServerProperties gRpcServerProperties;
     @Autowired
-    private PortletScanner portletScanner;
+    private DiscoveryProperties discoveryProperties;
+    @Autowired
+    private DiscoveryScanner discoveryScanner;
     
     private String[] serviceNames;
     private String selfUrl;
@@ -35,11 +36,11 @@ public class PortletService {
     
     protected void startup() {
         long now = System.currentTimeMillis();
-        serviceNames = portletScanner.getServices().stream()
+        serviceNames = discoveryScanner.getServices().stream()
                 .map(name -> SERVICE_PREFIX + name + "/" + now).toArray(String[]::new);
         selfUrl = findSelfUrl().toString();
         
-        PortletProperties.Url discoveryUrl = portletProperties.getUrl();
+        DiscoveryProperties.Url discoveryUrl = discoveryProperties.getUrl();
         kvClient = new KeyValueClient(discoveryUrl.getHost(), discoveryUrl.getPort());
         serviceClients = new ConcurrentHashMap<>();
         
@@ -54,7 +55,7 @@ public class PortletService {
                 for (String name : serviceNames) {
                     client.del(name);
                 }
-                long grace = portletProperties.getShutdownGrace().getSeconds();
+                long grace = discoveryProperties.getShutdownGrace().getSeconds();
                 client.shutdown(grace);
             } catch (InterruptedException e) {
                 log.error("gRPC client for KeyValueService interrupted during destroy.", e);
@@ -72,17 +73,17 @@ public class PortletService {
     
     protected void refresh() {
         // write self address into discovery
-        Duration expiration = portletProperties.getExpiration();
+        Duration expiration = discoveryProperties.getExpiration();
         for (String name : serviceNames) {
             kvClient.set(name, selfUrl, expiration.getSeconds() + "s");
         }
         
         // fetch the newest service map
-        if (portletScanner.getClients().isEmpty()) {
+        if (discoveryScanner.getClients().isEmpty()) {
             return;
         }
         long now = System.currentTimeMillis();
-        portletScanner.getClients().forEach((cls, builder) -> {
+        discoveryScanner.getClients().forEach((cls, builder) -> {
             Map<String, String> serviceMap = kvClient.get(SERVICE_PREFIX + builder.getName() + "/*");
             GRpcClient<?> client = serviceClients.get(cls);
             if (serviceMap.isEmpty()) {
@@ -100,9 +101,8 @@ public class PortletService {
         });
     }
     
-    @SuppressWarnings("unchecked")
     public <T extends GRpcClient<?>> T getClient(Class<T> cls) {
-        if (serviceClients == null) {
+        if (serviceClients == null || cls == null) {
             return null;
         }
         GRpcClient<?> client = serviceClients.get(cls);
@@ -110,11 +110,11 @@ public class PortletService {
             log.warn("No service found for gRPC client {}", cls.getName());
             return null;
         }
-        return (T)client;
+        return cls.cast(client);
     }
     
     public String getPortletUrl(String key) {
-        if (kvClient == null) {
+        if (kvClient == null || key == null) {
             return null;
         }
         Map<String, String> serviceMap = kvClient.get(PORTLET_PREFIX + key);
@@ -138,8 +138,8 @@ public class PortletService {
         // create a new client and shutdown the previous client
         try {
             String serviceAddr = serviceMap.get(serviceName);
-            PortletProperties.Url serviceUrl = toUrl(serviceAddr);
-            GRpcClientBuilder builder = portletScanner.getClients().get(cls);
+            DiscoveryProperties.Url serviceUrl = toUrl(serviceAddr);
+            GRpcClientBuilder builder = discoveryScanner.getClients().get(cls);
             GRpcClient<?> newClient = builder.newClient();
             newClient.init(serviceName, serviceUrl.getHost(), serviceUrl.getPort(), builder);
             newClient.setExpireTime(expireTime);
@@ -162,7 +162,7 @@ public class PortletService {
         
         log.info("Shutting down gRPC client for {} ...", client.getServiceName());
         try {
-            long grace = portletProperties.getShutdownGrace().getSeconds();
+            long grace = discoveryProperties.getShutdownGrace().getSeconds();
             client.shutdown(grace);
         } catch (InterruptedException e) {
             log.error(String.format("gRPC client for %s interrupted during destroy.", client.getServiceName()), e);
@@ -170,13 +170,13 @@ public class PortletService {
         log.info("gRPC client for {} destroyed.", client.getServiceName());
     }
     
-    private PortletProperties.Url findSelfUrl() {
+    private DiscoveryProperties.Url findSelfUrl() {
         try {
-            PortletProperties.Url url = new PortletProperties.Url();
+        	DiscoveryProperties.Url url = new DiscoveryProperties.Url();
             // prefer configure address if giving
-            if (portletProperties.getSelfUrl() != null) {
-                url.setHost(portletProperties.getSelfUrl().getHost());
-                url.setPort(portletProperties.getSelfUrl().getPort());
+            if (discoveryProperties.getSelfUrl() != null) {
+                url.setHost(discoveryProperties.getSelfUrl().getHost());
+                url.setPort(discoveryProperties.getSelfUrl().getPort());
             } else {
                 // find local address
                 url.setHost(InetUtils.findLocalAddress().getHostAddress());
@@ -200,10 +200,10 @@ public class PortletService {
         return keys[index];
     }
     
-    private PortletProperties.Url toUrl(String address) {
+    private DiscoveryProperties.Url toUrl(String address) {
         try {
             String[] parts = address.split(":");
-            PortletProperties.Url url = new PortletProperties.Url();
+            DiscoveryProperties.Url url = new DiscoveryProperties.Url();
             url.setHost(parts[0]);
             url.setPort(Integer.valueOf(parts[1]));
             return url;

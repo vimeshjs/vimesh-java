@@ -1,4 +1,4 @@
-package com.carota.vimesh.portlet.proto.discovery;
+package org.vimesh.discovery.proto;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
@@ -27,29 +27,29 @@ public final class KeyValueServiceGrpc {
   public static final String SERVICE_NAME = "KeyValueService";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse> getGetMethod;
+  private static volatile io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.GetRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.GetResponse> getGetMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "get",
-      requestType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest.class,
-      responseType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse.class,
+      requestType = org.vimesh.discovery.proto.DiscoveryProto.GetRequest.class,
+      responseType = org.vimesh.discovery.proto.DiscoveryProto.GetResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse> getGetMethod() {
-    io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse> getGetMethod;
+  public static io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.GetRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.GetResponse> getGetMethod() {
+    io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.GetRequest, org.vimesh.discovery.proto.DiscoveryProto.GetResponse> getGetMethod;
     if ((getGetMethod = KeyValueServiceGrpc.getGetMethod) == null) {
       synchronized (KeyValueServiceGrpc.class) {
         if ((getGetMethod = KeyValueServiceGrpc.getGetMethod) == null) {
           KeyValueServiceGrpc.getGetMethod = getGetMethod =
-              io.grpc.MethodDescriptor.<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse>newBuilder()
+              io.grpc.MethodDescriptor.<org.vimesh.discovery.proto.DiscoveryProto.GetRequest, org.vimesh.discovery.proto.DiscoveryProto.GetResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "get"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.GetRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.GetResponse.getDefaultInstance()))
               .setSchemaDescriptor(new KeyValueServiceMethodDescriptorSupplier("get"))
               .build();
         }
@@ -58,29 +58,29 @@ public final class KeyValueServiceGrpc {
     return getGetMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse> getKeysMethod;
+  private static volatile io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.KeysRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.KeysResponse> getKeysMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "keys",
-      requestType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest.class,
-      responseType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse.class,
+      requestType = org.vimesh.discovery.proto.DiscoveryProto.KeysRequest.class,
+      responseType = org.vimesh.discovery.proto.DiscoveryProto.KeysResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse> getKeysMethod() {
-    io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse> getKeysMethod;
+  public static io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.KeysRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.KeysResponse> getKeysMethod() {
+    io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.KeysRequest, org.vimesh.discovery.proto.DiscoveryProto.KeysResponse> getKeysMethod;
     if ((getKeysMethod = KeyValueServiceGrpc.getKeysMethod) == null) {
       synchronized (KeyValueServiceGrpc.class) {
         if ((getKeysMethod = KeyValueServiceGrpc.getKeysMethod) == null) {
           KeyValueServiceGrpc.getKeysMethod = getKeysMethod =
-              io.grpc.MethodDescriptor.<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse>newBuilder()
+              io.grpc.MethodDescriptor.<org.vimesh.discovery.proto.DiscoveryProto.KeysRequest, org.vimesh.discovery.proto.DiscoveryProto.KeysResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "keys"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.KeysRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.KeysResponse.getDefaultInstance()))
               .setSchemaDescriptor(new KeyValueServiceMethodDescriptorSupplier("keys"))
               .build();
         }
@@ -89,29 +89,29 @@ public final class KeyValueServiceGrpc {
     return getKeysMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> getSetMethod;
+  private static volatile io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.SetRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.Result> getSetMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "set",
-      requestType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest.class,
-      responseType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result.class,
+      requestType = org.vimesh.discovery.proto.DiscoveryProto.SetRequest.class,
+      responseType = org.vimesh.discovery.proto.DiscoveryProto.Result.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> getSetMethod() {
-    io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> getSetMethod;
+  public static io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.SetRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.Result> getSetMethod() {
+    io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.SetRequest, org.vimesh.discovery.proto.DiscoveryProto.Result> getSetMethod;
     if ((getSetMethod = KeyValueServiceGrpc.getSetMethod) == null) {
       synchronized (KeyValueServiceGrpc.class) {
         if ((getSetMethod = KeyValueServiceGrpc.getSetMethod) == null) {
           KeyValueServiceGrpc.getSetMethod = getSetMethod =
-              io.grpc.MethodDescriptor.<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result>newBuilder()
+              io.grpc.MethodDescriptor.<org.vimesh.discovery.proto.DiscoveryProto.SetRequest, org.vimesh.discovery.proto.DiscoveryProto.Result>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "set"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.SetRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.Result.getDefaultInstance()))
               .setSchemaDescriptor(new KeyValueServiceMethodDescriptorSupplier("set"))
               .build();
         }
@@ -120,29 +120,29 @@ public final class KeyValueServiceGrpc {
     return getSetMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> getDelMethod;
+  private static volatile io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.DelRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.Result> getDelMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "del",
-      requestType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest.class,
-      responseType = com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result.class,
+      requestType = org.vimesh.discovery.proto.DiscoveryProto.DelRequest.class,
+      responseType = org.vimesh.discovery.proto.DiscoveryProto.Result.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest,
-      com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> getDelMethod() {
-    io.grpc.MethodDescriptor<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> getDelMethod;
+  public static io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.DelRequest,
+      org.vimesh.discovery.proto.DiscoveryProto.Result> getDelMethod() {
+    io.grpc.MethodDescriptor<org.vimesh.discovery.proto.DiscoveryProto.DelRequest, org.vimesh.discovery.proto.DiscoveryProto.Result> getDelMethod;
     if ((getDelMethod = KeyValueServiceGrpc.getDelMethod) == null) {
       synchronized (KeyValueServiceGrpc.class) {
         if ((getDelMethod = KeyValueServiceGrpc.getDelMethod) == null) {
           KeyValueServiceGrpc.getDelMethod = getDelMethod =
-              io.grpc.MethodDescriptor.<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest, com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result>newBuilder()
+              io.grpc.MethodDescriptor.<org.vimesh.discovery.proto.DiscoveryProto.DelRequest, org.vimesh.discovery.proto.DiscoveryProto.Result>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "del"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.DelRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result.getDefaultInstance()))
+                  org.vimesh.discovery.proto.DiscoveryProto.Result.getDefaultInstance()))
               .setSchemaDescriptor(new KeyValueServiceMethodDescriptorSupplier("del"))
               .build();
         }
@@ -201,29 +201,29 @@ public final class KeyValueServiceGrpc {
 
     /**
      */
-    public void get(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse> responseObserver) {
+    public void get(org.vimesh.discovery.proto.DiscoveryProto.GetRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.GetResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getGetMethod(), responseObserver);
     }
 
     /**
      */
-    public void keys(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse> responseObserver) {
+    public void keys(org.vimesh.discovery.proto.DiscoveryProto.KeysRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.KeysResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getKeysMethod(), responseObserver);
     }
 
     /**
      */
-    public void set(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> responseObserver) {
+    public void set(org.vimesh.discovery.proto.DiscoveryProto.SetRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.Result> responseObserver) {
       asyncUnimplementedUnaryCall(getSetMethod(), responseObserver);
     }
 
     /**
      */
-    public void del(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> responseObserver) {
+    public void del(org.vimesh.discovery.proto.DiscoveryProto.DelRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.Result> responseObserver) {
       asyncUnimplementedUnaryCall(getDelMethod(), responseObserver);
     }
 
@@ -233,29 +233,29 @@ public final class KeyValueServiceGrpc {
             getGetMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest,
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse>(
+                org.vimesh.discovery.proto.DiscoveryProto.GetRequest,
+                org.vimesh.discovery.proto.DiscoveryProto.GetResponse>(
                   this, METHODID_GET)))
           .addMethod(
             getKeysMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest,
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse>(
+                org.vimesh.discovery.proto.DiscoveryProto.KeysRequest,
+                org.vimesh.discovery.proto.DiscoveryProto.KeysResponse>(
                   this, METHODID_KEYS)))
           .addMethod(
             getSetMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest,
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result>(
+                org.vimesh.discovery.proto.DiscoveryProto.SetRequest,
+                org.vimesh.discovery.proto.DiscoveryProto.Result>(
                   this, METHODID_SET)))
           .addMethod(
             getDelMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest,
-                com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result>(
+                org.vimesh.discovery.proto.DiscoveryProto.DelRequest,
+                org.vimesh.discovery.proto.DiscoveryProto.Result>(
                   this, METHODID_DEL)))
           .build();
     }
@@ -277,32 +277,32 @@ public final class KeyValueServiceGrpc {
 
     /**
      */
-    public void get(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse> responseObserver) {
+    public void get(org.vimesh.discovery.proto.DiscoveryProto.GetRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.GetResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getGetMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void keys(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse> responseObserver) {
+    public void keys(org.vimesh.discovery.proto.DiscoveryProto.KeysRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.KeysResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getKeysMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void set(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> responseObserver) {
+    public void set(org.vimesh.discovery.proto.DiscoveryProto.SetRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.Result> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getSetMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void del(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest request,
-        io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> responseObserver) {
+    public void del(org.vimesh.discovery.proto.DiscoveryProto.DelRequest request,
+        io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.Result> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getDelMethod(), getCallOptions()), request, responseObserver);
     }
@@ -324,28 +324,28 @@ public final class KeyValueServiceGrpc {
 
     /**
      */
-    public com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse get(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest request) {
+    public org.vimesh.discovery.proto.DiscoveryProto.GetResponse get(org.vimesh.discovery.proto.DiscoveryProto.GetRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse keys(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest request) {
+    public org.vimesh.discovery.proto.DiscoveryProto.KeysResponse keys(org.vimesh.discovery.proto.DiscoveryProto.KeysRequest request) {
       return blockingUnaryCall(
           getChannel(), getKeysMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result set(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest request) {
+    public org.vimesh.discovery.proto.DiscoveryProto.Result set(org.vimesh.discovery.proto.DiscoveryProto.SetRequest request) {
       return blockingUnaryCall(
           getChannel(), getSetMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result del(com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest request) {
+    public org.vimesh.discovery.proto.DiscoveryProto.Result del(org.vimesh.discovery.proto.DiscoveryProto.DelRequest request) {
       return blockingUnaryCall(
           getChannel(), getDelMethod(), getCallOptions(), request);
     }
@@ -367,32 +367,32 @@ public final class KeyValueServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse> get(
-        com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<org.vimesh.discovery.proto.DiscoveryProto.GetResponse> get(
+        org.vimesh.discovery.proto.DiscoveryProto.GetRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getGetMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse> keys(
-        com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<org.vimesh.discovery.proto.DiscoveryProto.KeysResponse> keys(
+        org.vimesh.discovery.proto.DiscoveryProto.KeysRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getKeysMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> set(
-        com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<org.vimesh.discovery.proto.DiscoveryProto.Result> set(
+        org.vimesh.discovery.proto.DiscoveryProto.SetRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getSetMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result> del(
-        com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<org.vimesh.discovery.proto.DiscoveryProto.Result> del(
+        org.vimesh.discovery.proto.DiscoveryProto.DelRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getDelMethod(), getCallOptions()), request);
     }
@@ -421,20 +421,20 @@ public final class KeyValueServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_GET:
-          serviceImpl.get((com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest) request,
-              (io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse>) responseObserver);
+          serviceImpl.get((org.vimesh.discovery.proto.DiscoveryProto.GetRequest) request,
+              (io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.GetResponse>) responseObserver);
           break;
         case METHODID_KEYS:
-          serviceImpl.keys((com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest) request,
-              (io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse>) responseObserver);
+          serviceImpl.keys((org.vimesh.discovery.proto.DiscoveryProto.KeysRequest) request,
+              (io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.KeysResponse>) responseObserver);
           break;
         case METHODID_SET:
-          serviceImpl.set((com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest) request,
-              (io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result>) responseObserver);
+          serviceImpl.set((org.vimesh.discovery.proto.DiscoveryProto.SetRequest) request,
+              (io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.Result>) responseObserver);
           break;
         case METHODID_DEL:
-          serviceImpl.del((com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest) request,
-              (io.grpc.stub.StreamObserver<com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result>) responseObserver);
+          serviceImpl.del((org.vimesh.discovery.proto.DiscoveryProto.DelRequest) request,
+              (io.grpc.stub.StreamObserver<org.vimesh.discovery.proto.DiscoveryProto.Result>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -458,7 +458,7 @@ public final class KeyValueServiceGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.getDescriptor();
+      return org.vimesh.discovery.proto.DiscoveryProto.getDescriptor();
     }
 
     @java.lang.Override

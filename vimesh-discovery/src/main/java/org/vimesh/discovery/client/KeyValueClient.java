@@ -1,17 +1,17 @@
-package com.carota.vimesh.portlet.client;
+package org.vimesh.discovery.client;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.DelRequest;
-import com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetRequest;
-import com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.GetResponse;
-import com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysRequest;
-import com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.KeysResponse;
-import com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.Result;
-import com.carota.vimesh.portlet.proto.discovery.DiscoveryProto.SetRequest;
-import com.carota.vimesh.portlet.proto.discovery.KeyValueServiceGrpc;
+import org.vimesh.discovery.proto.DiscoveryProto.DelRequest;
+import org.vimesh.discovery.proto.DiscoveryProto.GetRequest;
+import org.vimesh.discovery.proto.DiscoveryProto.GetResponse;
+import org.vimesh.discovery.proto.DiscoveryProto.KeysRequest;
+import org.vimesh.discovery.proto.DiscoveryProto.KeysResponse;
+import org.vimesh.discovery.proto.DiscoveryProto.Result;
+import org.vimesh.discovery.proto.DiscoveryProto.SetRequest;
+import org.vimesh.discovery.proto.KeyValueServiceGrpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

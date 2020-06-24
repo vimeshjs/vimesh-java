@@ -1,4 +1,4 @@
-package com.carota.vimesh.portlet;
+package org.vimesh.discovery;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -7,32 +7,31 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.vimesh.discovery.autoconfigure.DiscoveryProperties;
 
-import com.carota.vimesh.portlet.autoconfigure.PortletProperties;
-
-public class PortletRunner implements CommandLineRunner, DisposableBean {
+public class DiscoveryRunner implements CommandLineRunner, DisposableBean {
 
     @Autowired
-    private PortletProperties portletProperties;
+    private DiscoveryProperties discoveryProperties;
     @Autowired
-    private PortletService portlet;
+    private DiscoveryService discoveryService;
     
     private ScheduledExecutorService refreshExecutor;
     
-    public PortletRunner() {
+    public DiscoveryRunner() {
         this.refreshExecutor = Executors.newSingleThreadScheduledExecutor();
     }
     
     @Override
     public void run(String... args) throws Exception {
-        portlet.startup();
+        discoveryService.startup();
         
-        long interval = portletProperties.getRefreshInterval().toMillis();
+        long interval = discoveryProperties.getRefreshInterval().toMillis();
         refreshExecutor.scheduleWithFixedDelay(new Runnable() {
 
             @Override
             public void run() {
-                portlet.refresh();
+                discoveryService.refresh();
             }
             
         }, 0L, interval, TimeUnit.MILLISECONDS);
@@ -42,6 +41,6 @@ public class PortletRunner implements CommandLineRunner, DisposableBean {
     public void destroy() throws Exception {
         refreshExecutor.shutdown();
         
-        portlet.shutdown();
+        discoveryService.shutdown();
     }
 }

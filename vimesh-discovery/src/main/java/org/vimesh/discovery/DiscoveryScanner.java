@@ -1,4 +1,4 @@
-package com.carota.vimesh.portlet;
+package org.vimesh.discovery;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -13,9 +13,10 @@ import javax.annotation.PostConstruct;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-
-import com.carota.vimesh.grpc.annotation.GRpcService;
-import com.carota.vimesh.portlet.autoconfigure.PortletProperties;
+import org.vimesh.discovery.autoconfigure.DiscoveryProperties;
+import org.vimesh.grpc.annotation.GRpcService;
+import org.vimesh.grpc.client.GRpcClient;
+import org.vimesh.grpc.client.GRpcClientBuilder;
 
 import io.grpc.Channel;
 import lombok.Getter;
@@ -23,22 +24,22 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class PortletScanner {
+public class DiscoveryScanner {
     
     @Autowired
-    private PortletProperties portletProperties;
+    private DiscoveryProperties discoveryProperties;
     
     private Set<String> services = new HashSet<>();
     private Map<Class<?>, GRpcClientBuilder> clients = new ConcurrentHashMap<>();
 
     @PostConstruct
     private void init() {
-        if (!StringUtils.hasText(portletProperties.getScan())) {
+        if (!StringUtils.hasText(discoveryProperties.getScan())) {
             log.warn("Must set a package for gRPC scanning");
             return;
         }
         
-        Reflections reflections = new Reflections(portletProperties.getScan());
+        Reflections reflections = new Reflections(discoveryProperties.getScan());
         
         // scan services
         Set<Class<?>> serviceClasses = reflections.getTypesAnnotatedWith(GRpcService.class);
