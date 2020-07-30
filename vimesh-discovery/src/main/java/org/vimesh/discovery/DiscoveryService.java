@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.vimesh.discovery.autoconfigure.DiscoveryProperties;
 import org.vimesh.discovery.client.KeyValueClient;
 import org.vimesh.discovery.utils.InetUtils;
@@ -72,33 +73,37 @@ public class DiscoveryService {
     }
     
     protected void refresh() {
-        // write self address into discovery
-        Duration expiration = discoveryProperties.getExpiration();
-        for (String name : serviceNames) {
-            kvClient.set(name, selfUrl, expiration.getSeconds() + "s");
-        }
-        
-        // fetch the newest service map
-        if (discoveryScanner.getClients().isEmpty()) {
-            return;
-        }
-        long now = System.currentTimeMillis();
-        discoveryScanner.getClients().forEach((cls, builder) -> {
-            Map<String, String> serviceMap = kvClient.get(SERVICE_PREFIX + builder.getName() + "/*");
-            GRpcClient<?> client = serviceClients.get(cls);
-            if (serviceMap.isEmpty()) {
-                // no service available
-                serviceClients.remove(cls);
-                shutdownClient(client);
+        try {
+            // write self address into discovery
+            Duration expiration = discoveryProperties.getExpiration();
+            for (String name : serviceNames) {
+                kvClient.set(name, selfUrl, expiration.getSeconds() + "s");
+            }
+            
+            // fetch the newest service map
+            if (discoveryScanner.getClients().isEmpty()) {
                 return;
             }
-            if (client == null 
-                    || !serviceMap.containsKey(client.getServiceName())
-                    || client.getExpireTime() < now) {
-                // service no longer available or service is expired
-                switchClient(cls, client, serviceMap, now + expiration.toMillis());
-            }
-        });
+            long now = System.currentTimeMillis();
+            discoveryScanner.getClients().forEach((cls, builder) -> {
+                Map<String, String> serviceMap = kvClient.get(SERVICE_PREFIX + builder.getName() + "/*");
+                GRpcClient<?> client = serviceClients.get(cls);
+                if (CollectionUtils.isEmpty(serviceMap)) {
+                    // no service available
+                    serviceClients.remove(cls);
+                    shutdownClient(client);
+                    return;
+                }
+                if (client == null 
+                        || !serviceMap.containsKey(client.getServiceName())
+                        || client.getExpireTime() < now) {
+                    // service no longer available or service is expired
+                    switchClient(cls, client, serviceMap, now + expiration.toMillis());
+                }
+            });
+        } catch (Exception e) {
+            log.error("Exception in discovery refresh", e);
+        }
     }
     
     public <T extends GRpcClient<?>> T getClient(Class<T> cls) {
@@ -118,7 +123,7 @@ public class DiscoveryService {
             return null;
         }
         Map<String, String> serviceMap = kvClient.get(PORTLET_PREFIX + key);
-        if (serviceMap == null) {
+        if (CollectionUtils.isEmpty(serviceMap)) {
             return null;
         }
         String serviceName = selectServiceName(serviceMap);
