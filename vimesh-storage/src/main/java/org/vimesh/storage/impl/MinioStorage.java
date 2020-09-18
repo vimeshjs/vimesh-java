@@ -123,4 +123,9 @@ public class MinioStorage implements Storage {
         }
         return list;
     }
+
+    @Override
+    public String getObjectUrl(String bucket, String filePath) throws Exception {
+        return client.getObjectUrl(bucket, filePath);
+    }
 }

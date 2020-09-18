@@ -97,4 +97,10 @@ public class LocalStorage implements Storage {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getObjectUrl(String bucket, String filePath) throws Exception {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
