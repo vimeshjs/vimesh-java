@@ -1,5 +1,6 @@
 package org.vimesh.grpc.client;
 
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 import io.grpc.ManagedChannel;
@@ -11,7 +12,7 @@ public abstract class GRpcClient<T extends AbstractBlockingStub<T>> {
     private String serviceName;
     private ManagedChannel channel;
     private T stub;
-    private long expireTime;
+    private Instant expireTime;
     
     @SuppressWarnings("unchecked")
     public final void init(String name, String host, int port, GRpcClientBuilder builder) throws Exception {
@@ -32,11 +33,11 @@ public abstract class GRpcClient<T extends AbstractBlockingStub<T>> {
         return this.serviceName;
     }
     
-    public final void setExpireTime(long expireTime) {
+    public final void setExpireTime(Instant expireTime) {
         this.expireTime = expireTime;
     }
     
-    public final long getExpireTime() {
-        return this.expireTime;
+    public final boolean isExpired(Instant now) {
+        return this.expireTime != null ? now.isAfter(this.expireTime) : false;
     }
 }

@@ -29,9 +29,9 @@ public class DiscoveryProperties {
      */
     private Url selfUrl = null;
     /**
-     * address expiration time
+     * address expiration time, zero means no expiration
      */
-    private Duration expiration = Duration.ofMinutes(1);
+    private Duration expiration = Duration.ZERO;
     /**
      * time interval to sync address to discovery
      */

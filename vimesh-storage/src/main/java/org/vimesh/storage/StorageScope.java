@@ -60,6 +60,10 @@ public class StorageScope {
         return storage.getObjectUrl(bucket, prefix + filePath);
     }
     
+    public String getObjectPath(String filePath) throws Exception {
+        return storage.getObjectPath(bucket, prefix + filePath);
+    }
+    
     public byte[] getObjectAsBuffer(String filePath) throws Exception {
         try (InputStream input = getObject(filePath)) {
             return writeToOutput(input).toByteArray();

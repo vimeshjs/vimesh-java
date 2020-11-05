@@ -45,18 +45,26 @@ public class StorageProperties {
         /**
          * if type == "local", need this options
          */
-        //private LocalOptions local;
+        private LocalOptions local;
         /**
          * if type == "minio", need this options
          */
         private MinioOptions minio;
+        /**
+         * if type == "s3", need this options
+         */
+        private S3Options s3;
     }
     
-    /*@Getter
+    @Getter
     @Setter
     public static class LocalOptions {
         
-    }*/
+        /**
+         * Root directory path
+         */
+        private String root;
+    }
     
     @Getter
     @Setter
@@ -81,10 +89,36 @@ public class StorageProperties {
         /**
          * Region name of buckets in S3 service
          */
-        private String region = "";
+        //private String region = "";
         /**
          * Flag to indicate to use secure (TLS) connection to S3 service or not
          */
-        private boolean secure = false;
+        //private boolean secure = false;
+    }
+    
+    @Getter
+    @Setter
+    public static class S3Options {
+        
+        /**
+         * Endpoint is an URL, domain name, IPv4 or IPv6 address of S3 service 
+         */
+        private String endpoint;
+        /**
+         * Access key (aka user ID) of your account in S3 service
+         */
+        private String accessKey;
+        /**
+         * Secret Key (aka password) of your account in S3 service
+         */
+        private String secretKey;
+        /**
+         * Region name of buckets in S3 service
+         */
+        private String region;
+        /**
+         * Flag to indicate to use path-style access for all requests
+         */
+        private boolean pathStyle = true;
     }
 }
