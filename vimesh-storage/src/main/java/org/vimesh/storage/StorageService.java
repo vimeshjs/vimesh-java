@@ -54,10 +54,19 @@ public class StorageService {
         log.info("Storage service initialized");
     }
     
+    /**
+     * Get scope by name
+     * @param name storage name
+     * @return {@link StorageScope}
+     */
     public StorageScope getScope(String name) {
         return scopes.get(name);
     }
     
+    /**
+     * Get first scope
+     * @return {@link StorageScope}
+     */
     public StorageScope getScope() {
         return defaultScope;
     }

@@ -1,6 +1,7 @@
 package org.vimesh.discovery;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -75,16 +76,16 @@ public class DiscoveryService {
     protected void refresh() {
         try {
             // write self address into discovery
-            Duration expiration = discoveryProperties.getExpiration();
+            String duration = getDuration();
             for (String name : serviceNames) {
-                kvClient.set(name, selfUrl, expiration.getSeconds() + "s");
+                kvClient.set(name, selfUrl, duration);
             }
             
             // fetch the newest service map
             if (discoveryScanner.getClients().isEmpty()) {
                 return;
             }
-            long now = System.currentTimeMillis();
+            Instant now = Instant.now();
             discoveryScanner.getClients().forEach((cls, builder) -> {
                 Map<String, String> serviceMap = kvClient.get(SERVICE_PREFIX + builder.getName() + "/*");
                 GRpcClient<?> client = serviceClients.get(cls);
@@ -94,11 +95,9 @@ public class DiscoveryService {
                     shutdownClient(client);
                     return;
                 }
-                if (client == null 
-                        || !serviceMap.containsKey(client.getServiceName())
-                        || client.getExpireTime() < now) {
+                if (client == null || !serviceMap.containsKey(client.getServiceName()) || client.isExpired(now)) {
                     // service no longer available or service is expired
-                    switchClient(cls, client, serviceMap, now + expiration.toMillis());
+                    switchClient(cls, client, serviceMap, getNextExpireTime(now));
                 }
             });
         } catch (Exception e) {
@@ -131,7 +130,7 @@ public class DiscoveryService {
     }
     
     private GRpcClient<?> switchClient(
-            Class<?> cls, GRpcClient<?> client, Map<String, String> serviceMap, long expireTime) {
+            Class<?> cls, GRpcClient<?> client, Map<String, String> serviceMap, Instant expireTime) {
         String serviceName = selectServiceName(serviceMap);
         
         // still selected the previous client
@@ -216,5 +215,21 @@ public class DiscoveryService {
             log.error("string to url interrupted.", e);
             return null;
         }
+    }
+    
+    private String getDuration() {
+        Duration expiration = discoveryProperties.getExpiration();
+        if (expiration.isZero() || expiration.isNegative()) {
+            return "";
+        }
+        return expiration.getSeconds() + "s";
+    }
+    
+    private Instant getNextExpireTime(Instant now) {
+        Duration expiration = discoveryProperties.getExpiration();
+        if (expiration.isZero() || expiration.isNegative()) {
+            return null;
+        }
+        return now.plusMillis(expiration.toMillis());
     }
 }

@@ -1,6 +1,6 @@
 package org.vimesh.storage;
 
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -9,5 +9,5 @@ public class StorageStat {
 
     private final String name;
     private final long size;
-    private final ZonedDateTime time;
+    private final Date time;
 }
