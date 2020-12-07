@@ -70,6 +70,12 @@ public class LocalStorage implements Storage {
     }
 
     @Override
+    public boolean hasObject(String bucket, String filePath) throws Exception {
+        File file = Paths.get(root.getPath(), bucket, filePath).toFile();
+        return file.exists() && file.isFile();
+    }
+
+    @Override
     public void putObject(String bucket, String filePath, String localFile) throws Exception {
         Path src = Paths.get(localFile);
         Path dst = Paths.get(root.getPath(), bucket, filePath);
@@ -127,8 +133,11 @@ public class LocalStorage implements Storage {
     @Override
     public StorageStat statObject(String bucket, String filePath) throws Exception {
         File file = Paths.get(root.getPath(), bucket, filePath).toFile();
-        return new StorageStat(file.getName(), file.length(), 
-                Date.from(Instant.ofEpochMilli(file.lastModified())));
+        return StorageStat.builder()
+                .name(file.getName())
+                .size(file.length())
+                .time(Date.from(Instant.ofEpochMilli(file.lastModified())))
+                .build();
     }
 
     @Override
@@ -145,8 +154,11 @@ public class LocalStorage implements Storage {
         File[] files = StringUtils.hasText(prefix) ? 
                 f.listFiles((dir, name) -> name.startsWith(prefix)) : f.listFiles();
         return Arrays.asList(files).stream()
-                .map(file -> new StorageStat(file.getName(), file.length(), 
-                        Date.from(Instant.ofEpochMilli(file.lastModified()))))
+                .map(file -> StorageStat.builder()
+                        .name(file.getName())
+                        .size(file.length())
+                        .time(Date.from(Instant.ofEpochMilli(file.lastModified())))
+                        .build())
                 .collect(Collectors.toList());
     }
 

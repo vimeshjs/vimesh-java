@@ -75,6 +75,11 @@ public class S3Storage implements Storage {
     }
 
     @Override
+    public boolean hasObject(String bucket, String filePath) throws Exception {
+        return client.doesObjectExist(bucket, filePath);
+    }
+
+    @Override
     public void putObject(String bucket, String filePath, String localFile) throws Exception {
         client.putObject(bucket, filePath, new File(localFile));
     }
@@ -115,7 +120,11 @@ public class S3Storage implements Storage {
     @Override
     public StorageStat statObject(String bucket, String filePath) throws Exception {
         ObjectMetadata meta = client.getObjectMetadata(bucket, filePath);
-        return new StorageStat(filePath, meta.getContentLength(), meta.getLastModified());
+        return StorageStat.builder()
+                .name(filePath)
+                .size(meta.getContentLength())
+                .time(meta.getLastModified())
+                .build();
     }
 
     @Override
@@ -130,7 +139,11 @@ public class S3Storage implements Storage {
         }
         ListObjectsV2Result results = client.listObjectsV2(bucket, prefix);
         return results.getObjectSummaries().stream()
-                .map(s -> new StorageStat(s.getKey(), s.getSize(), s.getLastModified()))
+                .map(s -> StorageStat.builder()
+                        .name(s.getKey())
+                        .size(s.getSize())
+                        .time(s.getLastModified())
+                        .build())
                 .collect(Collectors.toList());
     }
 

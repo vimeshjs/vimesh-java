@@ -27,6 +27,7 @@ import io.minio.RemoveObjectArgs;
 import io.minio.Result;
 import io.minio.StatObjectArgs;
 import io.minio.UploadObjectArgs;
+import io.minio.errors.ErrorResponseException;
 import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import okhttp3.HttpUrl;
@@ -73,6 +74,19 @@ public class MinioStorage implements Storage {
         client.removeBucket(RemoveBucketArgs.builder().bucket(bucket).build());
     }
     
+    @Override
+    public boolean hasObject(String bucket, String filePath) throws Exception {
+        try {
+            client.statObject(StatObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(filePath)
+                    .build());
+            return true;
+        } catch (ErrorResponseException e) {
+            return false;
+        }
+    }
+
     @Override
     public void putObject(String bucket, String filePath, String localFile) throws Exception {
         client.uploadObject(UploadObjectArgs.builder()
@@ -139,8 +153,11 @@ public class MinioStorage implements Storage {
                 .bucket(bucket)
                 .object(filePath)
                 .build());
-        return new StorageStat(stat.name(), stat.length(), 
-                Date.from(stat.createdTime().toInstant()));
+        return StorageStat.builder()
+                .name(stat.name())
+                .size(stat.length())
+                .time(Date.from(stat.createdTime().toInstant()))
+                .build();
     }
     
     @Override
@@ -170,8 +187,11 @@ public class MinioStorage implements Storage {
             if (item.isDir()) {
                 continue;
             }
-            list.add(new StorageStat(item.objectName(), item.size(), 
-                    Date.from(item.lastModified().toInstant())));
+            list.add(StorageStat.builder()
+                    .name(item.objectName())
+                    .size(item.size())
+                    .time(Date.from(item.lastModified().toInstant()))
+                    .build());
         }
         return list;
     }

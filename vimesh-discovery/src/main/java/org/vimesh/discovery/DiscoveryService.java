@@ -76,9 +76,9 @@ public class DiscoveryService {
     protected void refresh() {
         try {
             // write self address into discovery
-            String duration = getDuration();
+            String selfDuration = getSelfDuration();
             for (String name : serviceNames) {
-                kvClient.set(name, selfUrl, duration);
+                kvClient.set(name, selfUrl, selfDuration);
             }
             
             // fetch the newest service map
@@ -217,12 +217,12 @@ public class DiscoveryService {
         }
     }
     
-    private String getDuration() {
-        Duration expiration = discoveryProperties.getExpiration();
-        if (expiration.isZero() || expiration.isNegative()) {
+    private String getSelfDuration() {
+        Duration duration = discoveryProperties.getSelfDuration();
+        if (duration.isZero() || duration.isNegative()) {
             return "";
         }
-        return expiration.getSeconds() + "s";
+        return duration.getSeconds() + "s";
     }
     
     private Instant getNextExpireTime(Instant now) {
@@ -230,6 +230,6 @@ public class DiscoveryService {
         if (expiration.isZero() || expiration.isNegative()) {
             return null;
         }
-        return now.plusMillis(expiration.toMillis());
+        return now.plusSeconds(expiration.getSeconds());
     }
 }

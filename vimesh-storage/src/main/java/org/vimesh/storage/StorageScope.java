@@ -13,6 +13,10 @@ public class StorageScope {
     private final String bucket;
     private final String prefix;
     
+    public boolean hasObject(String filePath) throws Exception {
+        return storage.hasObject(bucket, prefix + filePath);
+    }
+    
     public void putObject(String filePath, String localFile) throws Exception {
         storage.putObject(bucket, prefix + filePath, localFile);
     }
@@ -86,6 +90,10 @@ public class StorageScope {
         try (InputStream input = getObject(filePath, offset, size)) {
             return writeToOutput(input).toString();
         }
+    }
+    
+    public boolean hasBucketObject(String bucket, String filePath) throws Exception {
+        return storage.hasObject(bucket, prefix + filePath);
     }
     
     public void getBucketObject(String bucket, String filePath, String localFile) throws Exception {

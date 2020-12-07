@@ -29,17 +29,21 @@ public class DiscoveryProperties {
      */
     private Url selfUrl = null;
     /**
-     * address expiration time, zero means no expiration
+     * client expiration time, zero means no expiration (switch only when target down)
      */
     private Duration expiration = Duration.ZERO;
     /**
+     * self kv duration time, zero means no expiration (not recommended)
+     */
+    private Duration selfDuration = Duration.ofMinutes(1L);
+    /**
      * time interval to sync address to discovery
      */
-    private Duration refreshInterval = Duration.ofSeconds(3);
+    private Duration refreshInterval = Duration.ofSeconds(3L);
     /**
      * shutdown timeout of GRPC client
      */
-    private Duration shutdownGrace = Duration.ofSeconds(5);
+    private Duration shutdownGrace = Duration.ofSeconds(5L);
     
     @Getter
     @Setter

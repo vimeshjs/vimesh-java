@@ -10,7 +10,7 @@ public interface Storage {
     void createBucket(String bucket) throws Exception;
     void ensureBucket(String bucket) throws Exception;
     void deleteBucket(String bucket) throws Exception;
-    
+    boolean hasObject(String bucket, String filePath) throws Exception;
     void putObject(String bucket, String filePath, String localFile) throws Exception;
     void putObject(String bucket, String filePath, InputStream stream) throws Exception;
     void putObject(String bucket, String filePath, byte[] data) throws Exception;
