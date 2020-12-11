@@ -33,7 +33,7 @@ public class StorageService {
                 
                 String bucket = options.getBucket();
                 if (StringUtils.hasText(bucket)) {
-                    storage.ensureBucket(bucket);
+                    storage.ensureBucket(bucket, null);
                 } else {
                     bucket = null;
                 }

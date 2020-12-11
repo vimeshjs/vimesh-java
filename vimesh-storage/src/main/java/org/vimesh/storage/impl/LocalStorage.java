@@ -46,13 +46,13 @@ public class LocalStorage implements Storage {
     }
 
     @Override
-    public void createBucket(String bucket) throws Exception {
+    public void createBucket(String bucket, BucketOptions options) throws Exception {
         File f = Paths.get(root.getPath(), bucket).toFile();
         Assert.state(f.mkdir(), "Bucket directory cannot be created");
     }
 
     @Override
-    public void ensureBucket(String bucket) throws Exception {
+    public void ensureBucket(String bucket, BucketOptions options) throws Exception {
         File f = Paths.get(root.getPath(), bucket).toFile();
         if (f.exists()) {
             Assert.state(f.isDirectory(), "Bucket exists but not a directory");
@@ -76,7 +76,7 @@ public class LocalStorage implements Storage {
     }
 
     @Override
-    public void putObject(String bucket, String filePath, String localFile) throws Exception {
+    public void putObject(String bucket, String filePath, String localFile, ObjectOptions options) throws Exception {
         Path src = Paths.get(localFile);
         Path dst = Paths.get(root.getPath(), bucket, filePath);
         dst.getParent().toFile().mkdirs();
@@ -84,16 +84,16 @@ public class LocalStorage implements Storage {
     }
 
     @Override
-    public void putObject(String bucket, String filePath, InputStream stream) throws Exception {
+    public void putObject(String bucket, String filePath, InputStream stream, ObjectOptions options) throws Exception {
         Path dst = Paths.get(root.getPath(), bucket, filePath);
         dst.getParent().toFile().mkdirs();
         Files.copy(stream, dst, StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Override
-    public void putObject(String bucket, String filePath, byte[] data) throws Exception {
+    public void putObject(String bucket, String filePath, byte[] data, ObjectOptions options) throws Exception {
         try (InputStream stream = new ByteArrayInputStream(data)) {
-            putObject(bucket, filePath, stream);
+            putObject(bucket, filePath, stream, options);
         }
     }
 
@@ -125,7 +125,7 @@ public class LocalStorage implements Storage {
     @Override
     public void deleteObject(String bucket, String filePath) throws Exception {
         File file = Paths.get(root.getPath(), bucket, filePath).toFile();
-        if (file.exists()) {
+        if (file.exists() && file.isFile()) {
             Assert.state(file.delete(), "Object file cannot be deleted");
         }
     }
@@ -133,11 +133,14 @@ public class LocalStorage implements Storage {
     @Override
     public StorageStat statObject(String bucket, String filePath) throws Exception {
         File file = Paths.get(root.getPath(), bucket, filePath).toFile();
-        return StorageStat.builder()
-                .name(file.getName())
-                .size(file.length())
-                .time(Date.from(Instant.ofEpochMilli(file.lastModified())))
-                .build();
+        if (file.exists() && file.isFile()) {
+            return StorageStat.builder()
+                    .name(filePath)
+                    .size(file.length())
+                    .last(Date.from(Instant.ofEpochMilli(file.lastModified())))
+                    .build();
+        }
+        return StorageStat.builder().name(filePath).build();
     }
 
     @Override
@@ -157,7 +160,7 @@ public class LocalStorage implements Storage {
                 .map(file -> StorageStat.builder()
                         .name(file.getName())
                         .size(file.length())
-                        .time(Date.from(Instant.ofEpochMilli(file.lastModified())))
+                        .last(Date.from(Instant.ofEpochMilli(file.lastModified())))
                         .build())
                 .collect(Collectors.toList());
     }

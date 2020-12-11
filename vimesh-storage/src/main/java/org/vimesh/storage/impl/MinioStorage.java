@@ -6,11 +6,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.vimesh.storage.Storage;
 import org.vimesh.storage.StorageStat;
 import org.vimesh.storage.autoconfigure.StorageProperties.MinioOptions;
+import org.vimesh.storage.options.MinioObjectOptions;
 
 import io.minio.BucketExistsArgs;
 import io.minio.CopyObjectArgs;
@@ -20,7 +22,6 @@ import io.minio.GetObjectArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
-import io.minio.ObjectStat;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveBucketArgs;
 import io.minio.RemoveObjectArgs;
@@ -58,14 +59,14 @@ public class MinioStorage implements Storage {
     }
     
     @Override
-    public void createBucket(String bucket) throws Exception {
+    public void createBucket(String bucket, BucketOptions options) throws Exception {
         client.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
     }
     
     @Override
-    public void ensureBucket(String bucket) throws Exception {
+    public void ensureBucket(String bucket, BucketOptions options) throws Exception {
         if (!hasBucket(bucket)) {
-            createBucket(bucket);
+            createBucket(bucket, options);
         }
     }
     
@@ -88,27 +89,31 @@ public class MinioStorage implements Storage {
     }
 
     @Override
-    public void putObject(String bucket, String filePath, String localFile) throws Exception {
+    public void putObject(String bucket, String filePath, String localFile, ObjectOptions options) throws Exception {
+        Optional<MinioObjectOptions> opt = Optional.ofNullable(options).map(MinioObjectOptions::cast);
         client.uploadObject(UploadObjectArgs.builder()
                 .bucket(bucket)
                 .object(filePath)
                 .filename(localFile)
+                .userMetadata(opt.map(MinioObjectOptions::getUserMetadata).orElse(null))
                 .build());
     }
     
     @Override
-    public void putObject(String bucket, String filePath, InputStream stream) throws Exception {
+    public void putObject(String bucket, String filePath, InputStream stream, ObjectOptions options) throws Exception {
+        Optional<MinioObjectOptions> opt = Optional.ofNullable(options).map(MinioObjectOptions::cast);
         client.putObject(PutObjectArgs.builder()
                 .bucket(bucket)
                 .object(filePath)
                 .stream(stream, stream.available(), -1)
+                .userMetadata(opt.map(MinioObjectOptions::getUserMetadata).orElse(null))
                 .build());
     }
     
     @Override
-    public void putObject(String bucket, String filePath, byte[] data) throws Exception {
+    public void putObject(String bucket, String filePath, byte[] data, ObjectOptions options) throws Exception {
         try (InputStream stream = new ByteArrayInputStream(data)) {
-            putObject(bucket, filePath, stream);
+            putObject(bucket, filePath, stream, options);
         }
     }
     
@@ -149,15 +154,24 @@ public class MinioStorage implements Storage {
     
     @Override
     public StorageStat statObject(String bucket, String filePath) throws Exception {
-        ObjectStat stat = client.statObject(StatObjectArgs.builder()
+        Iterable<Result<Item>> results = client.listObjects(ListObjectsArgs.builder()
                 .bucket(bucket)
-                .object(filePath)
+                .prefix(filePath)
+                .includeUserMetadata(true)
                 .build());
-        return StorageStat.builder()
-                .name(stat.name())
-                .size(stat.length())
-                .time(Date.from(stat.createdTime().toInstant()))
-                .build();
+        for (Result<Item> result : results) {
+            Item item = result.get();
+            if (item.isDir() || !item.objectName().equals(filePath)) {
+                continue;
+            }
+            return StorageStat.builder()
+                    .name(filePath)
+                    .size(item.size())
+                    .last(Date.from(item.lastModified().toInstant()))
+                    .meta(item.userMetadata())
+                    .build();
+        }
+        return StorageStat.builder().name(filePath).build();
     }
     
     @Override
@@ -180,6 +194,7 @@ public class MinioStorage implements Storage {
         Iterable<Result<Item>> results = client.listObjects(ListObjectsArgs.builder()
                 .bucket(bucket)
                 .prefix(prefix)
+                .includeUserMetadata(true)
                 .build());
         List<StorageStat> list = new ArrayList<>();
         for (Result<Item> result : results) {
@@ -190,7 +205,8 @@ public class MinioStorage implements Storage {
             list.add(StorageStat.builder()
                     .name(item.objectName())
                     .size(item.size())
-                    .time(Date.from(item.lastModified().toInstant()))
+                    .last(Date.from(item.lastModified().toInstant()))
+                    .meta(item.userMetadata())
                     .build());
         }
         return list;

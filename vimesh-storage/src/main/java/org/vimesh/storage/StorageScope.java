@@ -18,15 +18,27 @@ public class StorageScope {
     }
     
     public void putObject(String filePath, String localFile) throws Exception {
-        storage.putObject(bucket, prefix + filePath, localFile);
+        storage.putObject(bucket, prefix + filePath, localFile, null);
+    }
+    
+    public void putObject(String filePath, String localFile, Storage.ObjectOptions options) throws Exception {
+        storage.putObject(bucket, prefix + filePath, localFile, options);
     }
     
     public void putObject(String filePath, InputStream stream) throws Exception {
-        storage.putObject(bucket, prefix + filePath, stream);
+        storage.putObject(bucket, prefix + filePath, stream, null);
+    }
+    
+    public void putObject(String filePath, InputStream stream, Storage.ObjectOptions options) throws Exception {
+        storage.putObject(bucket, prefix + filePath, stream, options);
     }
     
     public void putObject(String filePath, byte[] data) throws Exception {
-        storage.putObject(bucket, prefix + filePath, data);
+        storage.putObject(bucket, prefix + filePath, data, null);
+    }
+    
+    public void putObject(String filePath, byte[] data, Storage.ObjectOptions options) throws Exception {
+        storage.putObject(bucket, prefix + filePath, data, options);
     }
     
     public void getObject(String filePath, String localFile) throws Exception {
