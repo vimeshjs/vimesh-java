@@ -138,9 +138,15 @@ public class S3Storage implements Storage {
     }
 
     @Override
-    public InputStream getObject(String bucket, String filePath, long offset, long length) throws Exception {
-        return client.getObject(new GetObjectRequest(bucket, filePath)
-                .withRange(offset, offset + length)).getObjectContent();
+    public InputStream getObject(String bucket, String filePath, Long offset, Long length) throws Exception {
+        GetObjectRequest req = new GetObjectRequest(bucket, filePath);
+        long start = offset != null ? offset.longValue() : 0L;
+        if (length != null) {
+            req.setRange(start, start + length.longValue() - 1);
+        } else {
+            req.setRange(start);
+        }
+        return client.getObject(req).getObjectContent();
     }
 
     @Override
