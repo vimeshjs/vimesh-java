@@ -2,6 +2,7 @@ package org.vimesh.storage.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,9 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+
+import lombok.AllArgsConstructor;
 
 public class S3Storage implements Storage {
 
@@ -134,13 +138,19 @@ public class S3Storage implements Storage {
 
     @Override
     public InputStream getObject(String bucket, String filePath) throws Exception {
-        return client.getObject(bucket, filePath).getObjectContent();
+        return new WrappedS3ObjectInputStream(client.getObject(bucket, filePath).getObjectContent());
     }
 
     @Override
-    public InputStream getObject(String bucket, String filePath, long offset, long length) throws Exception {
-        return client.getObject(new GetObjectRequest(bucket, filePath)
-                .withRange(offset, offset + length)).getObjectContent();
+    public InputStream getObject(String bucket, String filePath, Long offset, Long length) throws Exception {
+        GetObjectRequest req = new GetObjectRequest(bucket, filePath);
+        long start = offset != null ? offset.longValue() : 0L;
+        if (length != null) {
+            req.setRange(start, start + length.longValue() - 1);
+        } else {
+            req.setRange(start);
+        }
+        return new WrappedS3ObjectInputStream(client.getObject(req).getObjectContent());
     }
 
     @Override
@@ -188,6 +198,59 @@ public class S3Storage implements Storage {
     @Override
     public String getObjectPath(String bucket, String filePath) throws Exception {
         return client.getUrl(bucket, filePath).getPath();
+    }
+    
+    @AllArgsConstructor
+    private class WrappedS3ObjectInputStream extends InputStream {
+
+        private final S3ObjectInputStream stream;
+        
+        @Override
+        public int read() throws IOException {
+            return this.stream.read();
+        }
+
+        @Override
+        public int read(byte[] b) throws IOException {
+            return this.stream.read(b);
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            return this.stream.read(b, off, len);
+        }
+
+        @Override
+        public long skip(long n) throws IOException {
+            return this.stream.skip(n);
+        }
+
+        @Override
+        public int available() throws IOException {
+            return this.stream.available();
+        }
+
+        @Override
+        public void close() throws IOException {
+            // abort before close
+            this.stream.abort();
+            this.stream.close();
+        }
+
+        @Override
+        public synchronized void mark(int readlimit) {
+            this.stream.mark(readlimit);
+        }
+
+        @Override
+        public synchronized void reset() throws IOException {
+            this.stream.reset();
+        }
+
+        @Override
+        public boolean markSupported() {
+            return this.stream.markSupported();
+        }
     }
     
     private Map<String, String> buildMeta(ObjectMetadata metadata) {

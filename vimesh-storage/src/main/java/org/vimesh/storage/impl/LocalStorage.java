@@ -112,11 +112,12 @@ public class LocalStorage implements Storage {
     }
 
     @Override
-    public InputStream getObject(String bucket, String filePath, long offset, long length) throws Exception {
+    public InputStream getObject(String bucket, String filePath, Long offset, Long length) throws Exception {
         try (InputStream stream = getObject(bucket, filePath)) {
-            int len = Long.valueOf(length).intValue();
+            long off = offset != null ? offset.longValue() : 0L;
+            int len = length != null ? length.intValue() : stream.available();
             byte[] data = new byte[len];
-            stream.skip(offset);
+            stream.skip(off);
             stream.read(data, 0, len);
             return new ByteArrayInputStream(data);
         }

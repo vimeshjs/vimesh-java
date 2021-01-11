@@ -48,9 +48,13 @@ public class StorageScope {
     public InputStream getObject(String filePath) throws Exception {
         return storage.getObject(bucket, prefix + filePath);
     }
+    
+    public InputStream getObject(String filePath, long offset) throws Exception {
+        return storage.getObject(bucket, prefix + filePath, offset, null);
+    }
 
-    public InputStream getObject(String filePath, long offset, long size) throws Exception {
-        return storage.getObject(bucket, prefix + filePath, offset, size);
+    public InputStream getObject(String filePath, long offset, long length) throws Exception {
+        return storage.getObject(bucket, prefix + filePath, offset, length);
     }
 
     public void deleteObject(String filePath) throws Exception {
@@ -86,8 +90,14 @@ public class StorageScope {
         }
     }
     
-    public byte[] getObjectAsBuffer(String filePath, long offset, long size) throws Exception {
-        try (InputStream input = getObject(filePath, offset, size)) {
+    public byte[] getObjectAsBuffer(String filePath, long offset) throws Exception {
+        try (InputStream input = getObject(filePath, offset)) {
+            return writeToOutput(input).toByteArray();
+        }
+    }
+    
+    public byte[] getObjectAsBuffer(String filePath, long offset, long length) throws Exception {
+        try (InputStream input = getObject(filePath, offset, length)) {
             return writeToOutput(input).toByteArray();
         }
     }
@@ -98,8 +108,14 @@ public class StorageScope {
         }
     }
     
-    public String getObjectAsString(String filePath, long offset, long size) throws Exception {
-        try (InputStream input = getObject(filePath, offset, size)) {
+    public String getObjectAsString(String filePath, long offset) throws Exception {
+        try (InputStream input = getObject(filePath, offset)) {
+            return writeToOutput(input).toString();
+        }
+    }
+    
+    public String getObjectAsString(String filePath, long offset, long length) throws Exception {
+        try (InputStream input = getObject(filePath, offset, length)) {
             return writeToOutput(input).toString();
         }
     }
@@ -115,9 +131,13 @@ public class StorageScope {
     public InputStream getBucketObject(String bucket, String filePath) throws Exception {
         return storage.getObject(bucket, prefix + filePath);
     }
+    
+    public InputStream getBucketObject(String bucket, String filePath, long offset) throws Exception {
+        return storage.getObject(bucket, prefix + filePath, offset, null);
+    }
 
-    public InputStream getBucketObject(String bucket, String filePath, long offset, long size) throws Exception {
-        return storage.getObject(bucket, prefix + filePath, offset, size);
+    public InputStream getBucketObject(String bucket, String filePath, long offset, long length) throws Exception {
+        return storage.getObject(bucket, prefix + filePath, offset, length);
     }
     
     public byte[] getBucketObjectAsBuffer(String bucket, String filePath) throws Exception {
@@ -126,8 +146,14 @@ public class StorageScope {
         }
     }
     
-    public byte[] getBucketObjectAsBuffer(String bucket, String filePath, long offset, long size) throws Exception {
-        try (InputStream input = getBucketObject(bucket, filePath, offset, size)) {
+    public byte[] getBucketObjectAsBuffer(String bucket, String filePath, long offset) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath, offset)) {
+            return writeToOutput(input).toByteArray();
+        }
+    }
+    
+    public byte[] getBucketObjectAsBuffer(String bucket, String filePath, long offset, long length) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath, offset, length)) {
             return writeToOutput(input).toByteArray();
         }
     }
@@ -138,8 +164,14 @@ public class StorageScope {
         }
     }
     
-    public String getBucketObjectAsString(String bucket, String filePath, long offset, long size) throws Exception {
-        try (InputStream input = getBucketObject(bucket, filePath, offset, size)) {
+    public String getBucketObjectAsString(String bucket, String filePath, long offset) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath, offset)) {
+            return writeToOutput(input).toString();
+        }
+    }
+    
+    public String getBucketObjectAsString(String bucket, String filePath, long offset, long length) throws Exception {
+        try (InputStream input = getBucketObject(bucket, filePath, offset, length)) {
             return writeToOutput(input).toString();
         }
     }

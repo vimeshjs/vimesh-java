@@ -19,7 +19,7 @@ public interface Storage {
     void putObject(String bucket, String filePath, byte[] data, ObjectOptions options) throws Exception;
     void getObject(String bucket, String filePath, String localFile) throws Exception;
     InputStream getObject(String bucket, String filePath) throws Exception;
-    InputStream getObject(String bucket, String filePath, long offset, long length) throws Exception;
+    InputStream getObject(String bucket, String filePath, Long offset, Long length) throws Exception;
     void deleteObject(String bucket, String filePath) throws Exception;
     StorageStat statObject(String bucket, String filePath) throws Exception;
     void copyObject(String bucket, String filePath, String srcBucket, String srcFilePath) throws Exception;

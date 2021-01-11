@@ -135,12 +135,12 @@ public class MinioStorage implements Storage {
     }
     
     @Override
-    public InputStream getObject(String bucket, String filePath, long offset, long size) throws Exception {
+    public InputStream getObject(String bucket, String filePath, Long offset, Long length) throws Exception {
         return client.getObject(GetObjectArgs.builder()
                 .bucket(bucket)
                 .object(filePath)
                 .offset(offset)
-                .length(size)
+                .length(length)
                 .build());
     }
     
