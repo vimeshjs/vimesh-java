@@ -24,6 +24,8 @@ public interface Storage {
     StorageStat statObject(String bucket, String filePath) throws Exception;
     void copyObject(String bucket, String filePath, String srcBucket, String srcFilePath) throws Exception;
     List<StorageStat> listObjects(String bucket, String prefix) throws Exception;
+    String getObjectHeader(String bucket, String filePath, String key) throws Exception;
+    String getObjectHeader(String bucket, String filePath, String key, Long offset, Long length) throws Exception;
     String getObjectUrl(String bucket, String filePath) throws Exception;
     String getObjectPath(String bucket, String filePath) throws Exception;
 }

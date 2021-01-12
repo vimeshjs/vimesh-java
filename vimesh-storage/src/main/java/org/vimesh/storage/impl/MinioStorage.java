@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import io.minio.GetObjectArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
+import io.minio.ObjectStat;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveBucketArgs;
 import io.minio.RemoveObjectArgs;
@@ -211,6 +213,24 @@ public class MinioStorage implements Storage {
         }
         return list;
     }
+    
+    @Override
+    public String getObjectHeader(String bucket, String filePath, String key) throws Exception {
+        ObjectStat stat = getObjectStat(bucket, filePath);
+        return getHeaderValue(stat, key);
+    }
+
+    @Override
+    public String getObjectHeader(String bucket, String filePath, String key, Long offset, Long length)
+            throws Exception {
+        ObjectStat stat = getObjectStat(bucket, filePath);
+        if ("Content-Range".equals(key)) {
+            long start = offset != null ? offset.longValue() : 0L;
+            long end = length != null ? Math.min(start + length.longValue(), stat.length()) - 1 : stat.length() - 1;
+            return "bytes " + start + "-" + end + "/" + stat.length();
+        }
+        return getHeaderValue(stat, key);
+    }
 
     @Override
     public String getObjectUrl(String bucket, String filePath) throws Exception {
@@ -220,5 +240,16 @@ public class MinioStorage implements Storage {
     @Override
     public String getObjectPath(String bucket, String filePath) throws Exception {
         return new URL(client.getObjectUrl(bucket, filePath)).getPath();
+    }
+    
+    private ObjectStat getObjectStat(String bucket, String filePath) throws Exception {
+        return client.statObject(StatObjectArgs.builder()
+                .bucket(bucket)
+                .object(filePath)
+                .build());
+    }
+    
+    private String getHeaderValue(ObjectStat stat, String key) {
+        return stat.httpHeaders().getOrDefault(key, Collections.emptyList()).toString();
     }
 }

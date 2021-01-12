@@ -29,6 +29,7 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 import lombok.AllArgsConstructor;
@@ -143,13 +144,7 @@ public class S3Storage implements Storage {
 
     @Override
     public InputStream getObject(String bucket, String filePath, Long offset, Long length) throws Exception {
-        GetObjectRequest req = new GetObjectRequest(bucket, filePath);
-        long start = offset != null ? offset.longValue() : 0L;
-        if (length != null) {
-            req.setRange(start, start + length.longValue() - 1);
-        } else {
-            req.setRange(start);
-        }
+        GetObjectRequest req = buildGetObjectRequest(bucket, filePath, offset, length);
         return new WrappedS3ObjectInputStream(client.getObject(req).getObjectContent());
     }
 
@@ -188,6 +183,18 @@ public class S3Storage implements Storage {
                         .meta(buildMeta(client.getObjectMetadata(bucket, s.getKey())))
                         .build())
                 .collect(Collectors.toList());
+    }
+    
+    @Override
+    public String getObjectHeader(String bucket, String filePath, String key) throws Exception {
+        return getHeaderValue(client.getObject(bucket, filePath), key);
+    }
+
+    @Override
+    public String getObjectHeader(String bucket, String filePath, String key, Long offset, Long length)
+            throws Exception {
+        GetObjectRequest req = buildGetObjectRequest(bucket, filePath, offset, length);
+        return getHeaderValue(client.getObject(req), key);
     }
 
     @Override
@@ -251,6 +258,22 @@ public class S3Storage implements Storage {
         public boolean markSupported() {
             return this.stream.markSupported();
         }
+    }
+    
+    private GetObjectRequest buildGetObjectRequest(String bucket, String filePath, Long offset, Long length) {
+        GetObjectRequest req = new GetObjectRequest(bucket, filePath);
+        long start = offset != null ? offset.longValue() : 0L;
+        if (length != null) {
+            req.setRange(start, start + length.longValue() - 1);
+        } else {
+            req.setRange(start);
+        }
+        return req;
+    }
+    
+    private String getHeaderValue(S3Object obj, String key) {
+        return Optional.ofNullable(obj.getObjectMetadata().getRawMetadataValue(key))
+                .map(Object::toString).orElse("");
     }
     
     private Map<String, String> buildMeta(ObjectMetadata metadata) {

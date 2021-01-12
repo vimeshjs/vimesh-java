@@ -165,6 +165,24 @@ public class LocalStorage implements Storage {
                         .build())
                 .collect(Collectors.toList());
     }
+    
+    @Override
+    public String getObjectHeader(String bucket, String filePath, String key) throws Exception {
+        return "";
+    }
+
+    @Override
+    public String getObjectHeader(String bucket, String filePath, String key, Long offset, Long length)
+            throws Exception {
+        if ("Content-Range".equals(key)) {
+            File file = Paths.get(root.getPath(), bucket, filePath).toFile();
+            long start = offset != null ? offset.longValue() : 0L;
+            long end = length != null ? 
+                    Math.min(start + length.longValue(), file.length()) - 1 : file.length() - 1;
+            return "bytes " + start + "-" + end + "/" + file.length();
+        }
+        return "";
+    }
 
     @Override
     public String getObjectUrl(String bucket, String filePath) throws Exception {

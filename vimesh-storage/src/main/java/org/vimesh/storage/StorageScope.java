@@ -76,6 +76,18 @@ public class StorageScope {
         return storage.listObjects(bucket, prefix + otherPrefix);
     }
     
+    public String getObjectHeader(String filePath, String key) throws Exception {
+        return storage.getObjectHeader(bucket, prefix + filePath, key);
+    }
+    
+    public String getObjectHeader(String filePath, String key, long offset) throws Exception {
+        return storage.getObjectHeader(bucket, prefix + filePath, key, offset, null);
+    }
+    
+    public String getObjectHeader(String filePath, String key, long offset, long length) throws Exception {
+        return storage.getObjectHeader(bucket, prefix + filePath, key, offset, length);
+    }
+    
     public String getObjectUrl(String filePath) throws Exception {
         return storage.getObjectUrl(bucket, prefix + filePath);
     }
