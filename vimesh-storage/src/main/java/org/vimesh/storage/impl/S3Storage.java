@@ -187,14 +187,18 @@ public class S3Storage implements Storage {
     
     @Override
     public String getObjectHeader(String bucket, String filePath, String key) throws Exception {
-        return getHeaderValue(client.getObject(bucket, filePath), key);
+        try (S3Object obj = client.getObject(bucket, filePath)) {
+            return getHeaderValue(obj, key);
+        }
     }
 
     @Override
     public String getObjectHeader(String bucket, String filePath, String key, Long offset, Long length)
             throws Exception {
         GetObjectRequest req = buildGetObjectRequest(bucket, filePath, offset, length);
-        return getHeaderValue(client.getObject(req), key);
+        try (S3Object obj = client.getObject(req)) {
+            return getHeaderValue(obj, key);
+        }
     }
 
     @Override
